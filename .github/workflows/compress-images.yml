@@ -1,0 +1,32 @@
+name: Compress Images
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**.png'
+      - '**.jpg'
+      - '**.jpeg'
+      - '**.webp'
+
+jobs:
+  compress:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Compress images
+        uses: calibreapp/image-actions@main
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          compressOnly: true
+          quality: 0.85
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "🖼️ Compressed images"
+          title: "Optimize images"
+          body: "Automatic image optimization from GitHub Actions"
